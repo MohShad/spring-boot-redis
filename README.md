@@ -10,7 +10,7 @@ An example of how spring-boot works with Redis caching
 
 ### Contribution guidelines ###
 * Rest-api
-* Redis
+* Redis~~~~
 * Spring Data JPA
 * H2
 

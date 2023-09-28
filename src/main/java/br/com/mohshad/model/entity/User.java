@@ -18,8 +18,8 @@ public class User implements Serializable {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", nullable = true)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "cargo", nullable = true)
+    @Column(name = "cargo", nullable = false)
     private String cargo;
 }

@@ -2,7 +2,10 @@ package br.com.mohshad.service;
 
 import br.com.mohshad.model.entity.User;
 import br.com.mohshad.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
@@ -13,11 +16,17 @@ import java.util.Optional;
 @Service
 @EnableCaching
 public class UserServiceImplementation implements UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImplementation.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImplementation(final UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
+    @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public void saveUser(User user) {
         this.userRepository.save(user);
     }
@@ -42,7 +51,8 @@ public class UserServiceImplementation implements UserService {
         try {
             Thread.sleep(2500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            logger.error("InterruptedException occurred in giveSomeDelay method", e);
         }
     }
 }
